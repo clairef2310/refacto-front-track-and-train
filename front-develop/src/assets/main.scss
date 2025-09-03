@@ -1,0 +1,83 @@
+#app {
+  background: #00231f;
+}
+
+html {
+  font-size: 16px;
+}
+
+h1 {
+  color: #ffffff !important;
+}
+
+.card-class {
+  background-color: rgba(140, 245, 235, 0.15) !important;
+  border: 1px thin #63A39F !important;
+  border-radius: 20px !important;
+  opacity: 95% !important;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+  .v-card-title {
+    color: rgba(255, 255, 255, 1) !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem !important;
+    line-height: 100% !important;
+    letter-spacing: 0 !important;
+  }
+}
+
+.primary-button {
+  display: inline-flex !important;
+  cursor: pointer !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  position: relative !important;
+  color: color-mix(in srgb, #00231f, white 10%) !important;
+  background-color: #2dd4bf !important;
+  border: 1px solid #2dd4bf !important;
+  padding: 0.625rem 1rem !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+}
+
+.secondary-button {
+  display: inline-flex;
+  cursor: pointer;
+  user-select: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  color: color-mix(in srgb, #00231f, white 5%);
+  background-color: color-mix(in srgb, #00231f, white 100%);
+  border: 1px solid color-mix(in srgb, #00231f, white 100%);
+  padding: 0.625rem 1rem;
+  border-radius: 2rem;
+  font-size: 1rem;
+}
+
+.delete-button {
+  display: inline-flex !important;
+  cursor: pointer !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  background-color: #920002 !important;
+  padding: 0.625rem 1rem !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+}
+
+.tertiary-button {
+  display: inline-flex !important;
+  cursor: pointer !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  border: 1px solid white !important;
+  background-color: transparent !important;
+  padding: 0.625rem 1rem !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+}

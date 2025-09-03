@@ -1,0 +1,4 @@
+@use 'vuetify/settings' with (
+  $button-text-transform: none,
+  $button-font-weight: 500
+);
