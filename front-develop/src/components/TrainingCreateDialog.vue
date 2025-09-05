@@ -1,4 +1,3 @@
-<!-- components/TrainingCreateDialog.vue -->
 <template>
   <v-dialog v-model="show" max-width="500">
     <v-card class="training-card">

@@ -37,22 +37,6 @@ const allMenuItems = ref([
     roles: ['user', 'coach', 'admin'],
     requiresAuth: true,
   },
-  // {
-  //   title: 'Statistiques',
-  //   icon: 'mdi-chart-bar',
-  //   hasSubmenu: false,
-  //   route: null, // Pas encore de route spécifique
-  //   roles: ['user', 'coach', 'admin'],
-  //   requiresAuth: true,
-  // },
-  // {
-  //   title: 'Recherche de coach',
-  //   icon: 'mdi-account-plus',
-  //   hasSubmenu: true,
-  //   route: null, // Action spéciale pour recherche
-  //   roles: ['user'],
-  //   requiresAuth: true,
-  // },
   {
     title: 'Groupes',
     icon: 'mdi-account-group',
@@ -69,31 +53,6 @@ const allMenuItems = ref([
     roles: ['admin'],
     requiresAuth: true,
   },
-
-  // {
-  //   title: 'Messagerie',
-  //   icon: 'mdi-message-text',
-  //   hasSubmenu: false,
-  //   route: null, // Pas encore de route spécifique
-  //   roles: ['user', 'coach', 'admin'],
-  //   requiresAuth: true,
-  // },
-  // {
-  //   title: 'Support',
-  //   icon: 'mdi-help-circle',
-  //   hasSubmenu: false,
-  //   route: null, // Pas encore de route spécifique
-  //   roles: ['user', 'coach', 'admin'],
-  //   requiresAuth: true,
-  // },
-  // {
-  //   title: 'Paramètres',
-  //   icon: 'mdi-cog',
-  //   hasSubmenu: false,
-  //   route: 'profile',
-  //   roles: ['user', 'coach', 'admin'],
-  //   requiresAuth: true,
-  // },
 ])
 
 const filteredMenuItems = computed(() => {
@@ -136,23 +95,18 @@ const handleItemClick = (item) => {
         handleCoachSearch()
         break
       case 'Diététique':
-        // Logique pour la diététique
         console.info('Fonctionnalité diététique à implémenter')
         break
       case 'Calendrier':
-        // Logique pour le calendrier
         console.info('Fonctionnalité calendrier à implémenter')
         break
       case 'Statistiques':
-        // Logique pour les statistiques
         console.info('Fonctionnalité statistiques à implémenter')
         break
       case 'Messagerie':
-        // Logique pour la messagerie
         console.info('Fonctionnalité messagerie à implémenter')
         break
       case 'Support':
-        // Logique pour le support
         console.info('Fonctionnalité support à implémenter')
         break
       default:

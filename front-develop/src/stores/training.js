@@ -5,7 +5,7 @@ export const useTrainingStore = defineStore('training', {
   state: () => ({
     currentTraining: null,
     tasks: [],
-    validations: {}, // Structure: { taskId: [validations] }
+    validations: {},
     loading: {
       training: false,
       tasks: false,

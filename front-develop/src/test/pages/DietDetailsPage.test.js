@@ -3,7 +3,6 @@ import { mount } from '@vue/test-utils'
 import { createVuetify } from 'vuetify'
 import { nextTick, reactive } from 'vue'
 
-// Stubs et mocks Vuetify
 globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
@@ -183,7 +182,7 @@ describe('DietDetailPage.vue', () => {
   })
 
   it('n\'affiche pas le bouton Ajouter si canCreatePlan est faux', async () => {
-    mockAuthStore.userRoles = ['user'] // pas coach ni admin
+    mockAuthStore.userRoles = ['user']
     wrapper = createWrapper()
     await nextTick()
     expect(wrapper.find('[data-test="primary-button"]').exists()).toBe(false)
@@ -208,7 +207,7 @@ describe('DietDetailPage.vue', () => {
   it('affiche "aucun plan repas" si mealPlans est vide', async () => {
     wrapper = createWrapper()
     await nextTick()
-    // Tab meals
+
     wrapper.vm.activeTab = 'meals'
     await nextTick()
     expect(wrapper.text()).toContain('Aucun plan repas disponible')

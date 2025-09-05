@@ -45,7 +45,6 @@ describe('LoginPage.vue', () => {
   it('redirige vers "/" si le token est présent après login', async () => {
   const wrapper = factory()
 
-  // Mock l'action login pour qu'elle mette le token dans le store
   store.login.mockImplementation(async () => {
     store.token = 'TOKEN'
   })

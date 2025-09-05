@@ -4,7 +4,6 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
-// Mock all CSS and style imports before creating Vuetify
 vi.mock('*.css', () => ({}))
 vi.mock('*.scss', () => ({}))
 vi.mock('*.sass', () => ({}))
@@ -12,13 +11,11 @@ vi.mock('*.less', () => ({}))
 vi.mock('*.styl', () => ({}))
 vi.mock('*.stylus', () => ({}))
 
-// Mock specific Vuetify CSS files and styles
 vi.mock('vuetify/lib/components/VCode/VCode.css', () => ({}))
 vi.mock('vuetify/styles', () => ({}))
 vi.mock('vuetify/lib/**/*.css', () => ({}))
 vi.mock('vuetify/_styles.sass', () => ({}))
 
-// Mock image and other asset files
 vi.mock('*.png', () => 'test-file-stub')
 vi.mock('*.jpg', () => 'test-file-stub')
 vi.mock('*.jpeg', () => 'test-file-stub')
@@ -80,7 +77,6 @@ config.global.mocks = {
 }
 
 config.global.components = {
-  // Au lieu de mocker des composants séparés, nous moquons directement VBtn
   VBtn: {
     render() {
       return null

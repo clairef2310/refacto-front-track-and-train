@@ -3,7 +3,6 @@ import { setActivePinia, createPinia } from 'pinia'
 import { useTrainingStore } from '@/stores/training'
 import api from '@/plugins/axios'
 
-// Mock dependencies
 vi.mock('@/plugins/axios', () => ({
   default: {
     get: vi.fn(),
@@ -54,7 +53,6 @@ describe('Training Store', () => {
         task2: []
       }
       
-      // Vérifions directement la logique du getter
       expect(!!store.validations['task1'] && store.validations['task1'].length > 0).toBe(true)
       expect(!!store.validations['task2'] && store.validations['task2'].length > 0).toBe(false)
       expect(!!store.validations['task3'] && store.validations['task3']?.length > 0).toBe(false)
@@ -70,12 +68,11 @@ describe('Training Store', () => {
           { id: 'v3', calculated_difficulty: 3 }
         ],
         task3: [
-          { id: 'v4' } // No difficulty
+          { id: 'v4' }
         ],
-        task4: [] // Empty array
+        task4: []
       }
       
-      // Test de la logique du getter directement
       const task1Validations = store.validations['task1']
       const validWithDifficulty = task1Validations.filter(v => v.calculated_difficulty)
       const totalDifficulty = validWithDifficulty.reduce((sum, v) => sum + v.calculated_difficulty, 0)
@@ -83,11 +80,9 @@ describe('Training Store', () => {
       
       expect(average).toBe(6)
       
-      // Pour task2
       const task2Average = store.validations['task2'][0].calculated_difficulty
       expect(task2Average).toBe(3)
       
-      // Pour task sans difficulté ou vide, on s'attendrait à 0
       expect(store.validations['task3'].filter(v => v.calculated_difficulty).length).toBe(0)
       expect(store.validations['task4'].length).toBe(0)
     })
@@ -102,20 +97,18 @@ describe('Training Store', () => {
       store.validations = {
         task1: [{ calculated_difficulty: 4 }],
         task2: [{ calculated_difficulty: 6 }],
-        task3: [] // No validations
+        task3: []
       }
       
-      // Calculer manuellement ce que le getter devrait retourner
       const taskDifficulties = [
-        4, // Task1 average
-        6, // Task2 average
-        0  // Task3 average (pas de validations)
+        4,
+        6, 
+        0 
       ].filter(d => d > 0)
       
       const totalDifficulty = taskDifficulties.reduce((sum, d) => sum + d, 0)
       const expectedAverage = Math.round((totalDifficulty / taskDifficulties.length) * 10) / 10
       
-      // Moyenne de 4 et 6 = 5
       expect(expectedAverage).toBe(5)
     })
 
@@ -123,13 +116,11 @@ describe('Training Store', () => {
       store.tasks = []
       store.validations = {}
       
-      // Si pas de tâches, on s'attend à 0
       expect(0).toBe(0)
       
       store.tasks = [{ id: 'task1' }]
       store.validations = { task1: [] }
-      
-      // Si des tâches mais pas de validations avec difficulté, on s'attend à 0
+
       expect(0).toBe(0)
     })
   })
@@ -144,7 +135,6 @@ describe('Training Store', () => {
       
       const difficulty = store.calculateDifficulty(validation)
       
-      // Should return a number between 1-10
       expect(difficulty).toBeGreaterThanOrEqual(1)
       expect(difficulty).toBeLessThanOrEqual(10)
     })
@@ -206,19 +196,16 @@ describe('Training Store', () => {
 
       expect(api.get).toHaveBeenCalledWith('/trainings/training1/validations')
       
-      // Check that validations are grouped by task_id
       expect(Object.keys(store.validations)).toEqual(['task1', 'task2'])
       expect(store.validations.task1.length).toBe(2)
       expect(store.validations.task2.length).toBe(1)
       
-      // Check that each validation has calculated_difficulty
       store.validations.task1.forEach(v => {
         expect(v.calculated_difficulty).toBeDefined()
       })
       
-      // Check sorting by date (newest first)
-      expect(store.validations.task1[0].id).toBe('v2') // 2025-01-03
-      expect(store.validations.task1[1].id).toBe('v1') // 2025-01-02
+      expect(store.validations.task1[0].id).toBe('v2')
+      expect(store.validations.task1[1].id).toBe('v1')
     })
 
     it('fetchAllValidations fetches tasks when not loaded', async () => {

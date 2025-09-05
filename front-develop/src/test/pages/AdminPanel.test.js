@@ -6,7 +6,6 @@ import * as directives from 'vuetify/directives'
 import { createPinia, setActivePinia } from 'pinia'
 import AdminPanel from '@/pages/training/AdminPanelPage.vue'
 
-// Mock des composants enfants
 vi.mock('@/components/UserCard.vue', () => ({
   default: {
     name: 'UserCard',
@@ -25,7 +24,6 @@ vi.mock('@/components/UserDetailModal.vue', () => ({
   }
 }))
 
-// Mock du store snackbar
 let mockSnackbarStore
 
 const createMockSnackbarStore = () => ({
@@ -43,7 +41,6 @@ describe('AdminPanel', () => {
   let pinia
   let mockApi
 
-  // Fonction pour créer des données fraîches à chaque test
   const createMockUsers = () => [
     {
       id: '1',
@@ -71,14 +68,13 @@ describe('AdminPanel', () => {
     },
     {
       id: '5',
-      name: null, // Test avec nom null
+      name: null,
       email: 'noname@example.com',
       roles: ['user']
     }
   ]
 
   beforeEach(async () => {
-    // Réinitialiser le mock du store
     mockSnackbarStore = createMockSnackbarStore()
 
     vuetify = createVuetify({
@@ -89,14 +85,11 @@ describe('AdminPanel', () => {
     pinia = createPinia()
     setActivePinia(pinia)
 
-    // Utiliser l'API mockée depuis le setup global
     const { default: api } = await import('@/plugins/axios')
     mockApi = api
-    
-    // Reset des mocks
+
     vi.clearAllMocks()
-    
-    // Configuration de la réponse API par défaut avec des données fraîches
+
     mockApi.get.mockResolvedValue({ data: createMockUsers() })
   })
 
@@ -107,7 +100,7 @@ describe('AdminPanel', () => {
   })
 
   const createWrapper = async (customUsers = null) => {
-    // Si des utilisateurs personnalisés sont fournis, les utiliser
+
     if (customUsers) {
       mockApi.get.mockResolvedValueOnce({ data: customUsers })
     }
@@ -166,23 +159,21 @@ describe('AdminPanel', () => {
       
       const statCards = wrapper.findAll('.stat-card')
       expect(statCards.length).toBeGreaterThanOrEqual(2)
-      
-      // Vérifier que le nombre total d'utilisateurs est affiché
-      expect(wrapper.text()).toContain('5') // createMockUsers().length
+
+      expect(wrapper.text()).toContain('5')
       expect(wrapper.text()).toContain('Utilisateurs total')
     })
 
     it('devrait afficher le nombre de coachs', async () => {
       await createWrapper()
       
-      expect(wrapper.text()).toContain('2') // Jane Smith et Alice Brown sont coachs
+      expect(wrapper.text()).toContain('2')
       expect(wrapper.text()).toContain('Coachs')
     })
 
     it('devrait recalculer les statistiques quand les utilisateurs changent', async () => {
       await createWrapper()
-      
-      // Remplacer complètement le tableau pour éviter les mutations
+
       const newUsers = [
         ...createMockUsers(),
         {
@@ -226,7 +217,7 @@ describe('AdminPanel', () => {
       const searchField = wrapper.find('input[type="text"]')
       await searchField.setValue('john')
       
-      expect(wrapper.vm.filteredUsers).toHaveLength(2) // John Doe et Bob Johnson
+      expect(wrapper.vm.filteredUsers).toHaveLength(2)
       expect(wrapper.vm.filteredUsers.map(u => u.name)).toContain('John Doe')
       expect(wrapper.vm.filteredUsers.map(u => u.name)).toContain('Bob Johnson')
     })
@@ -319,9 +310,6 @@ describe('AdminPanel', () => {
       mockApi.get.mockReturnValueOnce(loadingPromise)
       
       const wrapperPromise = createWrapper()
-      
-      // Pendant le chargement
-      // Note: L'état de chargement est géré dans fetchUsers
       
       resolvePromise({ data: createMockUsers() })
       await wrapperPromise
@@ -490,8 +478,7 @@ describe('AdminPanel', () => {
       
       wrapper.vm.searchQuery = 'test'
       expect(wrapper.vm.filteredUsers).toHaveLength(0)
-      
-      // Remplacer le tableau entier plutôt que de le muter
+
       wrapper.vm.users = [
         ...wrapper.vm.users,
         {

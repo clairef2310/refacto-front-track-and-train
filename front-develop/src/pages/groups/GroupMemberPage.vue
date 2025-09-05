@@ -103,7 +103,6 @@
       </v-window-item>
     </v-window>
 
-    <!-- Modal de confirmation pour retirer un utilisateur -->
     <v-dialog v-model="removeUserDialog" max-width="400">
       <v-card>
         <v-card-title class="text-h6">
@@ -158,7 +157,6 @@ const pageUsers = ref(1)
 const allLoadedUsers = ref(false)
 const loadingAddUser = ref({})
 
-// Variables pour la suppression
 const loadingRemoveUser = ref({})
 const removeUserDialog = ref(false)
 const selectedUserToRemove = ref(null)
@@ -274,12 +272,10 @@ async function confirmRemoveUser() {
   try {
     await api.delete(`/groups/${groupId}/members/${userId}`)
 
-    // Retirer l'utilisateur de la liste des membres
     groupMembers.value = groupMembers.value.filter((member) => member.id !== userId)
 
     snackbarStore.success(`${selectedUserToRemove.value.name} a été retiré du groupe !`)
 
-    // Fermer la modal et réinitialiser
     removeUserDialog.value = false
     selectedUserToRemove.value = null
   } catch (error) {

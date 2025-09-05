@@ -92,13 +92,6 @@ const goToDiet = (dietId) => {
   router.push(`/diet/${dietId}`)
 }
 
-const openCreateTraining = () => {
-  // logiques d'ouverture de dialog ou navigation pour créer un training
-}
-
-const openCreateDiet = () => {
-  // logiques d'ouverture de dialog ou navigation pour créer un diet
-}
 </script>
 
 <style lang="scss" scoped>

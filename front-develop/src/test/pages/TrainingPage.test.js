@@ -3,7 +3,6 @@ import { mount } from '@vue/test-utils'
 import Training from '@/pages/Training.vue'
 import { RouterView } from 'vue-router'
 
-// Mock pour RouterView
 vi.mock('vue-router', () => ({
   RouterView: vi.fn(() => null)
 }))

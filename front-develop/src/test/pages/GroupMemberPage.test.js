@@ -5,7 +5,6 @@ import GroupMembers from '@/pages/groups/GroupMemberPage.vue'
 import api from '@/plugins/axios'
 import { useRouter } from 'vue-router'
 
-// Mock des dépendances
 vi.mock('@/plugins/axios', () => ({
   default: {
     get: vi.fn(),
@@ -21,7 +20,6 @@ vi.mock('@/stores/snackbar', () => ({
   }))
 }))
 
-// Mock de vue-router
 vi.mock('vue-router', () => ({
   useRoute: vi.fn(() => ({
     params: { groupId: 'group123' }
@@ -39,19 +37,16 @@ describe('GroupMembers', () => {
   let mockRouter
 
   beforeEach(async () => {
-    // Reset mocks
+
     vi.clearAllMocks()
-    
-    // Récupérer le mock du router
+ 
     mockRouter = {
       push: vi.fn(),
       back: vi.fn()
     }
-    
-    // Configurer le mock de useRouter
+
     useRouter.mockReturnValue(mockRouter)
-    
-    // Mock API responses
+
     api.get.mockImplementation((url) => {
       if (url === '/groups/group123/members') {
         return Promise.resolve({
@@ -70,8 +65,7 @@ describe('GroupMembers', () => {
       }
       return Promise.reject(new Error('Unknown endpoint'))
     })
-    
-    // Monter le composant
+
     wrapper = mount(GroupMembers, {
       global: {
         plugins: [vuetify],
@@ -83,26 +77,24 @@ describe('GroupMembers', () => {
           VTextField: true,
           VList: true,
           VListItem: true,
-          VBtn: true  // Stuber VBtn au lieu des alias
+          VBtn: true
         }
       }
     })
-    
-    // Attendre que les données soient chargées
+
     await flushPromises()
   })
 
   it('correctly determines if a user is already in the group', () => {
-    // Les utilisateurs sont déjà chargés via le mock d'API
+
     expect(wrapper.vm.isUserInGroup('user1')).toBe(true)
     expect(wrapper.vm.isUserInGroup('user3')).toBe(false)
   })
 
   it('navigates to user profile when view profile is clicked', async () => {
-    // Appeler la méthode viewProfile
+
     await wrapper.vm.viewProfile('user123')
-    
-    // Vérifier la navigation
+
     expect(mockRouter.push).toHaveBeenCalledWith('/profiles/user123')
   })
 })

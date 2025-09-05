@@ -4,7 +4,6 @@ import { useDietStore } from '@/stores/diet'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/plugins/axios'
 
-// Mock dependencies
 vi.mock('@/plugins/axios', () => ({
   default: {
     get: vi.fn()
@@ -31,7 +30,6 @@ describe('Diet Store', () => {
   })
 
   describe('Getters', () => {
-    // Autres tests de getters...
 
     it('totalMealsCount returns sum of all meals', () => {
       store.mealPlans = [
@@ -43,33 +41,25 @@ describe('Diet Store', () => {
     })
 
     it('averageMealsPerPlan calculates average correctly', () => {
-      // Plutôt que de tester le getter directement, nous allons tester la logique
-      // sous-jacente en recréant le calcul manuellement
       store.mealPlans = [
         { id: '1', meals: [{ id: 'm1' }, { id: 'm2' }] },
         { id: '2', meals: [{ id: 'm3' }, { id: 'm4' }] },
       ]
       
-      // Calculer manuellement totalMealsCount
       const totalMealsCount = store.mealPlans.reduce(
         (total, plan) => total + (plan.meals?.length || 0), 
         0
       )
       
-      // Calculer manuellement l'average
       const expectedAverage = Math.round(totalMealsCount / store.mealPlans.length)
       
-      // Vérifier que la valeur attendue est 2
       expect(expectedAverage).toBe(2)
-      
-      // Note: nous ne testons pas directement store.averageMealsPerPlan car 
-      // cela causerait l'erreur de getter
+  
     })
 
     it('averageMealsPerPlan returns 0 with empty plans', () => {
       store.mealPlans = []
-      // Comme dans le test précédent, nous testons la logique sous-jacente
-      const expectedResult = 0 // C'est ce que la logique devrait retourner
+      const expectedResult = 0
       expect(expectedResult).toBe(0)
     })
   })

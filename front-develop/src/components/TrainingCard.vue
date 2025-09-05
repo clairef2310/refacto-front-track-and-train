@@ -1,4 +1,3 @@
-<!-- components/TrainingCard.vue -->
 <template>
   <v-card class="ma-2 training-slide-card" width="300" hover elevation="2" @click="$emit('click')">
     <v-card-title class="text-h6">{{ training.name }}</v-card-title>

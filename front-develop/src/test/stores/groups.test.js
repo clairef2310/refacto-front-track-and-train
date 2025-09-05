@@ -3,7 +3,6 @@ import { setActivePinia, createPinia } from 'pinia'
 import { useGroupsStore } from '@/stores/groups'
 import api from '@/plugins/axios'
 
-// Mock dependencies
 vi.mock('@/plugins/axios', () => ({
   default: {
     get: vi.fn(),

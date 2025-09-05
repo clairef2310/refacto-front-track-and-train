@@ -5,14 +5,11 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { createPinia, setActivePinia } from 'pinia'
 
-// Import du vrai router pour les tests
 vi.unmock('vue-router')
 import { createRouter, createWebHistory } from 'vue-router'
 
-// Changez ce chemin selon l'emplacement réel de votre composant
 import TrainingDetail from '@/pages/training/TrainingDetailsPage.vue'
 
-// Mock des composants enfants
 vi.mock('@/components/TaskCreateDialog.vue', () => ({
   default: {
     name: 'TaskCreateDialog',
@@ -49,7 +46,6 @@ vi.mock('@/components/DeleteConfirmationDialog.vue', () => ({
   }
 }))
 
-// Mock des stores
 let mockTrainingStore, mockAuthStore, mockContextualStore, mockSnackbarStore
 
 const createMockTrainingStore = () => ({
@@ -131,7 +127,6 @@ describe('TrainingDetail', () => {
   let mockApi
 
   beforeEach(async () => {
-    // Réinitialiser les mocks des stores
     mockTrainingStore = createMockTrainingStore()
     mockAuthStore = createMockAuthStore()
     mockContextualStore = createMockContextualStore()
@@ -166,14 +161,11 @@ describe('TrainingDetail', () => {
     pinia = createPinia()
     setActivePinia(pinia)
 
-    // Utiliser l'API mockée depuis le setup global
     const { default: api } = await import('@/plugins/axios')
     mockApi = api
-    
-    // Reset des mocks
+
     vi.clearAllMocks()
-    
-    // Configuration des réponses API par défaut
+
     mockApi.post.mockResolvedValue({ data: { success: true } })
     mockApi.delete.mockResolvedValue({ data: { success: true } })
   })
@@ -404,8 +396,7 @@ describe('TrainingDetail', () => {
       
       const dataTable = wrapper.find('[data-testid="data-table"]')
       expect(dataTable.exists()).toBe(true)
-      
-      // Vérifier les données des tâches via les cellules
+
       expect(wrapper.find('[data-testid="cell-exercise_name"]').exists()).toBe(true)
       expect(wrapper.find('[data-testid="cell-sets_reps"]').exists()).toBe(true)
       expect(wrapper.find('[data-testid="cell-rest_time"]').exists()).toBe(true)
@@ -426,12 +417,10 @@ describe('TrainingDetail', () => {
 
     it('devrait gérer l\'expansion des lignes', async () => {
       await createWrapper()
-      
-      // Chercher le composant VDataTable par son nom et vérifier qu'il existe
+
       const dataTable = wrapper.findComponent({ name: 'VDataTable' })
       expect(dataTable.exists()).toBe(true)
-      
-      // Tester directement la méthode handleExpandedChange du composant parent
+
       const expandedItems = ['task-1']
       await wrapper.vm.handleExpandedChange(expandedItems)
       
@@ -445,8 +434,7 @@ describe('TrainingDetail', () => {
       mockContextualStore.userProfileId = 'target-user-id'
       
       await createWrapper()
-      
-      // Tester directement la méthode
+
       wrapper.vm.showCreateTask = true
       await wrapper.vm.$nextTick()
       
@@ -585,8 +573,7 @@ describe('TrainingDetail', () => {
 
     it('devrait gérer les erreurs de chargement des validations', async () => {
       await createWrapper()
-      
-      // Créer un mock séparé pour cette méthode spécifique
+
       const originalFetchAllValidations = mockTrainingStore.fetchAllValidations
       mockTrainingStore.fetchAllValidations = vi.fn().mockRejectedValueOnce(new Error('Load failed'))
       
@@ -595,8 +582,7 @@ describe('TrainingDetail', () => {
       await wrapper.vm.loadAllValidations()
       
       expect(consoleSpy).toHaveBeenCalledWith('Erreur lors du chargement des validations:', expect.any(Error))
-      
-      // Restaurer les mocks
+
       consoleSpy.mockRestore()
       mockTrainingStore.fetchAllValidations = originalFetchAllValidations
     })
@@ -680,15 +666,13 @@ describe('TrainingDetail', () => {
       
       const task = mockTrainingStore.tasks[0]
       wrapper.vm.selectedTaskToDelete = task
-      
-      // Créer une promesse qui ne se résout pas immédiatement
+
       let resolveDelete
       const deletePromise = new Promise(resolve => { resolveDelete = resolve })
       mockApi.delete.mockReturnValueOnce(deletePromise)
       
       const deleteCall = wrapper.vm.confirmDeleteTask()
-      
-      // Vérifier l'état de chargement
+
       expect(wrapper.vm.deletingTaskId).toBe('task-1')
       
       resolveDelete({ data: { success: true } })

@@ -16,7 +16,6 @@
       </div>
 
       <div v-else>
-        <!-- Repas du jour -->
         <div class="today-meals mb-4">
           <h4 class="text-subtitle-1 mb-2">Aujourd'hui</h4>
           <v-row>
@@ -34,7 +33,6 @@
           </v-row>
         </div>
 
-        <!-- Actions -->
         <div class="text-center">
           <SecondaryButton outlined @click="goToAllMeals" class="mr-2">
             Voir tous mes repas
@@ -59,7 +57,6 @@ const props = defineProps({
 
 const router = useRouter()
 
-// Repas d'aujourd'hui
 const todayMeals = computed(() => {
   const today = new Date().toISOString().split('T')[0]
   return props.meals?.filter((meal) => meal.date?.startsWith(today)) || []

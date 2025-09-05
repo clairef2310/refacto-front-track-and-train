@@ -4,7 +4,6 @@ import { useAuthStore } from '@/stores/auth'
 import { useSnackbarStore } from '@/stores/snackbar'
 import api from '@/plugins/axios'
 
-// Configuration du mock pour le localStorage
 const localStorageMock = (() => {
   let store = {}
   return {
@@ -22,7 +21,6 @@ const localStorageMock = (() => {
 })()
 Object.defineProperty(window, 'localStorage', { value: localStorageMock })
 
-// Mock des dépendances
 vi.mock('@/plugins/axios', () => ({
   default: {
     post: vi.fn(),
@@ -30,7 +28,6 @@ vi.mock('@/plugins/axios', () => ({
   }
 }))
 
-// Mock du store snackbar
 vi.mock('@/stores/snackbar', () => ({
   useSnackbarStore: vi.fn()
 }))
@@ -40,11 +37,10 @@ describe('Auth Store', () => {
   let mockSnackbar
 
   beforeEach(() => {
-    // Réinitialiser les mocks
+
     vi.clearAllMocks()
     localStorageMock.clear()
-    
-    // Créer un mock pour snackbar
+
     mockSnackbar = {
       success: vi.fn(),
       error: vi.fn(),
@@ -52,7 +48,6 @@ describe('Auth Store', () => {
     }
     useSnackbarStore.mockReturnValue(mockSnackbar)
     
-    // Créer un pinia frais pour chaque test
     setActivePinia(createPinia())
     store = useAuthStore()
   })

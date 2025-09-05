@@ -12,7 +12,6 @@
       <v-card-text v-if="user">
         <v-form ref="form">
           <v-row>
-            <!-- Email -->
             <v-col cols="12" md="6">
               <div class="field-container">
                 <v-text-field
@@ -32,8 +31,6 @@
                 </div>
               </div>
             </v-col>
-
-            <!-- Nom -->
             <v-col cols="12" md="6">
               <div class="field-container">
                 <v-text-field
@@ -53,8 +50,6 @@
                 </div>
               </div>
             </v-col>
-
-            <!-- Sexe -->
             <v-col cols="12" md="6">
               <div class="field-container">
                 <v-select
@@ -77,8 +72,6 @@
                 </div>
               </div>
             </v-col>
-
-            <!-- Âge -->
             <v-col cols="12" md="6">
               <div class="field-container h-100">
                 <v-text-field
@@ -99,8 +92,6 @@
                 </div>
               </div>
             </v-col>
-
-            <!-- Contact -->
             <v-col cols="12">
               <div class="field-container">
                 <v-text-field
@@ -120,8 +111,6 @@
                 </div>
               </div>
             </v-col>
-
-            <!-- Pricing -->
             <v-col cols="12" md="6">
               <div class="field-container">
                 <v-text-field
@@ -143,8 +132,6 @@
                 </div>
               </div>
             </v-col>
-
-            <!-- Rôles -->
             <v-col cols="12" md="6">
               <div class="field-container">
                 <v-select
@@ -167,8 +154,6 @@
                 </div>
               </div>
             </v-col>
-
-            <!-- Description -->
             <v-col cols="12">
               <div class="field-container">
                 <v-textarea
@@ -188,8 +173,6 @@
                 </div>
               </div>
             </v-col>
-
-            <!-- Legacy -->
             <v-col cols="12">
               <div class="field-container">
                 <v-textarea
@@ -209,8 +192,6 @@
                 </div>
               </div>
             </v-col>
-
-            <!-- Section Password -->
             <v-col cols="12">
               <h3 class="text-white">Changer le mot de passe</h3>
             </v-col>
@@ -236,8 +217,6 @@
                 </div>
               </div>
             </v-col>
-
-            <!-- Infos read-only -->
             <v-col cols="12" md="6">
               <v-text-field :model-value="user.id" label="ID" readonly  />
             </v-col>
@@ -276,7 +255,6 @@ const emit = defineEmits(['update:modelValue', 'user-updated'])
 
 const snackbar = useSnackbarStore()
 
-// État local
 const localShow = computed({
   get: () => props.modelValue,
   set: (value) => emit('update:modelValue', value),
@@ -286,7 +264,6 @@ const editedUser = ref({})
 const originalUser = ref({})
 const newPassword = ref('')
 
-// Loading pour chaque champ
 const fieldLoading = ref({
   email: false,
   name: false,
@@ -302,7 +279,6 @@ const fieldLoading = ref({
 
 const availableRoles = ['user', 'coach', 'admin']
 
-// Watchers
 watch(
   () => props.user,
   (newUser) => {
@@ -311,7 +287,6 @@ watch(
       originalUser.value = { ...newUser }
       newPassword.value = ''
 
-      // Reset tous les états
       Object.keys(fieldLoading.value).forEach((key) => {
         fieldLoading.value[key] = false
       })
@@ -320,11 +295,10 @@ watch(
   { immediate: true },
 )
 
-// Methods
 const onFieldBlur = async (field) => {
-  // Vérifier si la valeur a changé
+
   if (editedUser.value[field] === originalUser.value[field]) {
-    return // Pas de changement
+    return
   }
 
   await saveField(field)
@@ -355,7 +329,6 @@ const saveField = async (field) => {
     let response
     const userId = editedUser.value.id
 
-    // Utiliser la bonne route selon le champ
     switch (field) {
       case 'email':
         response = await api.patch(`/profiles/${userId}/email`, {
@@ -374,12 +347,11 @@ const saveField = async (field) => {
           response = await api.patch(`/profiles/${userId}/password`, {
             password: newPassword.value,
           })
-          newPassword.value = '' // Reset après sauvegarde
+          newPassword.value = ''
           snackbar.success('Mot de passe mis à jour avec succès')
         }
         break
 
-      // Pour les autres champs, utiliser la route classique
       default: {
         const updateData = {}
         updateData[field] = editedUser.value[field]
@@ -389,29 +361,23 @@ const saveField = async (field) => {
       }
     }
 
-    // Mettre à jour les données si on a une réponse
     if (response && response.data) {
-      // Mettre à jour l'utilisateur local
       Object.assign(editedUser.value, response.data)
       originalUser.value = { ...editedUser.value }
 
-      // Émettre la mise à jour
       emit('user-updated', editedUser.value)
     } else {
-      // Si pas de réponse, juste mettre à jour les données originales
       originalUser.value[field] = editedUser.value[field]
     }
   } catch (error) {
     console.error(`Erreur lors de la sauvegarde du champ ${field}:`, error)
 
-    // Restaurer la valeur originale
     if (field === 'password') {
       newPassword.value = ''
     } else {
       editedUser.value[field] = originalUser.value[field]
     }
 
-    // Afficher l'erreur
     const message =
       error.response?.data?.message || `Erreur lors de la mise à jour du ${getFieldLabel(field)}`
     snackbar.error(message)

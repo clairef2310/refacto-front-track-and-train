@@ -3,14 +3,12 @@ import { mount } from '@vue/test-utils'
 import { createVuetify } from 'vuetify'
 import { nextTick } from 'vue'
 
-// Mock ResizeObserver pour Vuetify
 globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
 }))
 
-// Mock des modules
 vi.mock('vue-router', () => ({
   useRoute: vi.fn()
 }))
@@ -27,7 +25,6 @@ vi.mock('@/stores/snackbar', () => ({
   useSnackbarStore: vi.fn()
 }))
 
-// Import du composant après les mocks
 import GroupsCoachPage from '@/pages/groups/GroupsCoachPage.vue'
 import { useRoute } from 'vue-router'
 import { useGroupsStore } from '@/stores/groups'
@@ -116,7 +113,6 @@ describe('GroupsCoachPage', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
-    // Créer de nouveaux mocks à chaque test pour éviter la pollution
     mockRoute = {
       params: { ownerId: 'owner123' }
     }
@@ -140,7 +136,6 @@ describe('GroupsCoachPage', () => {
       error: vi.fn()
     }
 
-    // Configuration des mocks
     useRoute.mockReturnValue(mockRoute)
     useGroupsStore.mockReturnValue(mockGroupsStore)
     useAuthStore.mockReturnValue(mockAuthStore)
@@ -188,7 +183,7 @@ describe('GroupsCoachPage', () => {
 
   describe('Gestion des erreurs', () => {
     it('devrait afficher une alerte d\'erreur quand fetchError existe', async () => {
-      // Mock spécifique avec fetchError
+
       const errorStore = {
         ...mockGroupsStore,
         fetchError: 'Erreur de chargement',
@@ -198,15 +193,14 @@ describe('GroupsCoachPage', () => {
       
       wrapper = createWrapper()
       await nextTick()
-      
-      // Vérifier que l'erreur est affichée
+
       const errorAlert = wrapper.find('[data-test="error-alert"]')
       expect(errorAlert.exists()).toBe(true)
       expect(errorAlert.text()).toContain('Erreur de chargement')
     })
 
     it('devrait afficher l\'erreur même pendant le chargement', async () => {
-      // Mock spécifique avec erreur ET loading
+
       const errorLoadingStore = {
         ...mockGroupsStore,
         fetchError: 'Erreur de chargement',
@@ -216,8 +210,7 @@ describe('GroupsCoachPage', () => {
       
       wrapper = createWrapper()
       await nextTick()
-      
-      // Les deux peuvent être affichés simultanément
+
       expect(wrapper.find('[data-test="error-alert"]').exists()).toBe(true)
       expect(wrapper.find('[data-test="loading-spinner"]').exists()).toBe(true)
       expect(wrapper.find('[data-test="error-alert"]').text()).toContain('Erreur de chargement')
@@ -226,7 +219,7 @@ describe('GroupsCoachPage', () => {
 
   describe('État vide', () => {
     beforeEach(() => {
-      // Mock spécifique pour l'état vide
+
       const emptyStore = {
         ...mockGroupsStore,
         hasGroups: false,
@@ -252,12 +245,10 @@ describe('GroupsCoachPage', () => {
       
       const emptyState = wrapper.find('.empty-state')
       expect(emptyState.exists()).toBe(true)
-      
-      // Chercher l'icône dans l'état vide
+  
       const icon = emptyState.find('.v-icon')
       expect(icon.exists()).toBe(true)
-      
-      // Vérifier le contenu de l'icône ou ses attributs
+
       const iconContent = icon.text() || icon.attributes('data-icon') || icon.html()
       expect(iconContent).toMatch(/mdi-account-group/)
     })
@@ -266,15 +257,12 @@ describe('GroupsCoachPage', () => {
       mockAuthStore.userId = 'owner123'
       wrapper = createWrapper()
       await nextTick()
-      
-      // Chercher le bouton PrimaryButton qui n'est PAS dans un v-tooltip (donc qui est affiché directement)
+ 
       const emptyState = wrapper.find('.empty-state')
       const buttons = emptyState.findAll('[data-test="primary-button"]')
-      
-      // Il devrait y avoir au moins un bouton
+
       expect(buttons.length).toBeGreaterThan(0)
-      
-      // Chercher le bouton qui n'est pas désactivé
+
       const enabledButton = buttons.find(btn => !btn.attributes('disabled'))
       expect(enabledButton.exists()).toBe(true)
       expect(enabledButton.text()).toContain('Créer un groupe')
@@ -284,8 +272,7 @@ describe('GroupsCoachPage', () => {
       mockAuthStore.userId = 'different-user'
       wrapper = createWrapper()
       await nextTick()
-      
-      // Chercher le tooltip qui contient le bouton désactivé
+
       const tooltip = wrapper.find('.v-tooltip')
       expect(tooltip.exists()).toBe(true)
       
@@ -298,7 +285,6 @@ describe('GroupsCoachPage', () => {
 
   describe('Affichage des groupes', () => {
     beforeEach(() => {
-      // Mock spécifique pour l'affichage des groupes
       const groupsStore = {
         ...mockGroupsStore,
         hasGroups: true,
@@ -421,8 +407,7 @@ describe('GroupsCoachPage', () => {
       
       wrapper = createWrapper()
       await nextTick()
-      
-      // Chercher le bouton enabled dans l'état vide
+
       const emptyState = wrapper.find('.empty-state')
       const buttons = emptyState.findAll('[data-test="primary-button"]')
       const enabledButton = buttons.find(btn => !btn.attributes('disabled'))

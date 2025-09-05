@@ -8,7 +8,6 @@
       <v-card-text>
         <v-text-field v-model="name" label="Nom du groupe" bg-color="white" required autofocus />
         <v-textarea class="mt-3" v-model="description" label="Description" rows="3" bg-color="white" />
-        <!-- PAS D'ALERT ERREUR ICI -->
       </v-card-text>
       <v-card-actions>
         <TertiaryButton @click="close">Annuler</TertiaryButton>

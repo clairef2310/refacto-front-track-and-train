@@ -5,14 +5,11 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { createPinia, setActivePinia } from 'pinia'
 
-// Import du vrai router pour les tests
 vi.unmock('vue-router')
 import { createRouter, createWebHistory } from 'vue-router'
 
-// Changez ce chemin selon l'emplacement réel de votre composant
 import UserProfilePage from '@/pages/profiles/UserProfilePage.vue'
 
-// Mock des composants enfants
 vi.mock('@/components/TrainingList.vue', () => ({
   default: {
     name: 'TrainingList',
@@ -49,10 +46,8 @@ vi.mock('@/components/DietCreateDialog.vue', () => ({
   }
 }))
 
-// Mock des stores
 let mockAuthStore, mockContextualStore, mockSnackbarStore
 
-// Créer des fonctions de factory pour les stores
 const createMockAuthStore = () => ({
   userRoles: ['coach'],
   userId: 'different-user-id'
@@ -108,7 +103,6 @@ describe('UserProfilePage', () => {
   ]
 
   beforeEach(async () => {
-    // Réinitialiser les mocks des stores
     mockAuthStore = createMockAuthStore()
     mockContextualStore = createMockContextualStore()
     mockSnackbarStore = createMockSnackbarStore()
@@ -148,14 +142,11 @@ describe('UserProfilePage', () => {
     pinia = createPinia()
     setActivePinia(pinia)
 
-    // Utiliser l'API mockée depuis le setup global
     const { default: api } = await import('@/plugins/axios')
     mockApi = api
     
-    // Reset des mocks
     vi.clearAllMocks()
     
-    // Configuration des réponses API par défaut
     mockApi.get.mockImplementation((url) => {
       if (url.includes('/profiles/')) {
         return Promise.resolve({ data: mockUser })
@@ -302,11 +293,9 @@ describe('UserProfilePage', () => {
     it('devrait naviguer vers une page de training avec les bons paramètres', async () => {
       await createWrapper()
       
-      // Créer un spy sur la méthode push du router
       const pushSpy = vi.fn()
       router.push = pushSpy
       
-      // Simuler le clic sur un training via l'événement émis par le composant enfant
       const trainingList = wrapper.findComponent({ name: 'TrainingList' })
       await trainingList.vm.$emit('trainingClick', 'training-123')
       
@@ -321,11 +310,9 @@ describe('UserProfilePage', () => {
     it('devrait naviguer vers une page de diet avec les bons paramètres', async () => {
       await createWrapper()
       
-      // Créer un spy sur la méthode push du router
       const pushSpy = vi.fn()
       router.push = pushSpy
       
-      // Simuler le clic sur un diet via l'événement émis par le composant enfant
       const dietList = wrapper.findComponent({ name: 'DietList' })
       await dietList.vm.$emit('dietClick', 'diet-456')
       
@@ -345,7 +332,6 @@ describe('UserProfilePage', () => {
       const trainingDialog = wrapper.findComponent({ name: 'TrainingCreateDialog' })
       expect(trainingDialog.exists()).toBe(true)
       
-      // Simuler l'événement de création
       await trainingDialog.vm.$emit('created', { name: 'New Training', description: 'New Description' })
       
       await flushPromises()
@@ -378,7 +364,6 @@ describe('UserProfilePage', () => {
       const dietDialog = wrapper.findComponent({ name: 'DietCreateDialog' })
       expect(dietDialog.exists()).toBe(true)
       
-      // Simuler l'événement de création
       await dietDialog.vm.$emit('created', { name: 'New Diet', description: 'New Diet Description' })
       
       await flushPromises()
@@ -408,11 +393,9 @@ describe('UserProfilePage', () => {
     it('devrait réagir aux changements de route', async () => {
       await createWrapper({ uuid: 'user1' })
       
-      // Reset les appels précédents
       mockContextualStore.setUserProfileId.mockClear()
       mockApi.get.mockClear()
       
-      // Changer de route
       await router.push('/profile/user2')
       await flushPromises()
       
@@ -434,11 +417,9 @@ describe('UserProfilePage', () => {
       const trainingList = wrapper.findComponent({ name: 'TrainingList' })
       const dietList = wrapper.findComponent({ name: 'DietList' })
       
-      // Vérifier que les composants existent
       expect(trainingList.exists()).toBe(true)
       expect(dietList.exists()).toBe(true)
-      
-      // Vérifier les props passées
+
       expect(trainingList.props('trainings')).toEqual(mockTrainings)
       expect(dietList.props('diets')).toEqual(mockDiets)
     })
@@ -468,8 +449,6 @@ describe('UserProfilePage', () => {
       
       await createWrapper({ uuid: 'test-user-id' })
       
-      // Le computed canCreateForUser devrait être true
-      // Vérifier via l'existence des slots d'action
       const trainingList = wrapper.findComponent({ name: 'TrainingList' })
       const dietList = wrapper.findComponent({ name: 'DietList' })
       
@@ -483,7 +462,6 @@ describe('UserProfilePage', () => {
       
       await createWrapper({ uuid: 'test-user-id' })
       
-      // Le computed canCreateForUser devrait être false
       const trainingList = wrapper.findComponent({ name: 'TrainingList' })
       const dietList = wrapper.findComponent({ name: 'DietList' })
       
@@ -497,7 +475,6 @@ describe('UserProfilePage', () => {
       
       await createWrapper({ uuid: 'test-user-id' })
       
-      // Le computed canCreateForUser devrait être false
       const trainingList = wrapper.findComponent({ name: 'TrainingList' })
       const dietList = wrapper.findComponent({ name: 'DietList' })
       

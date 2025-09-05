@@ -7,7 +7,6 @@
           <p class="user-email">{{ user.email }}</p>
         </div>
 
-        <!-- Badges des rôles -->
         <div class="user-roles">
           <v-chip
             v-for="role in user.roles"

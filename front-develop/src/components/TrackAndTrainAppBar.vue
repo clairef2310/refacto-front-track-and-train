@@ -56,10 +56,8 @@
             </v-btn>
           </template>
 
-          <!-- Menu dropdown -->
           <v-card class="avatar-menu-card py-0" min-width="200">
             <v-list density="compact" nav>
-              <!-- En-tête du menu avec info utilisateur -->
               <v-list-item class="user-info-item">
                 <template #prepend>
                   <v-avatar size="32">
@@ -71,8 +69,6 @@
               </v-list-item>
 
               <v-divider></v-divider>
-
-              <!-- Option Profil -->
               <v-list-item
                 @click="goToProfile"
                 class="menu-item"
@@ -83,7 +79,6 @@
                 <v-list-item-title>Profil</v-list-item-title>
               </v-list-item>
 
-              <!-- Option Déconnexion -->
               <v-list-item
                 @click="logout"
                 class="menu-item logout-item"
@@ -98,7 +93,6 @@
         </v-menu>
       </template>
 
-      <!-- Bouton de connexion si non connecté -->
       <template v-else>
         <PrimaryButton
           class="login-btn"
@@ -119,7 +113,6 @@ import { useAuthStore } from '@/stores/auth'
 const router = useRouter()
 const authStore = useAuthStore()
 
-// États
 const avatarMenu = ref(false)
 const notificationCount = ref(3)
 
@@ -127,7 +120,6 @@ const userAvatar = computed(() => {
   return authStore.user?.avatar ? authStore.user.avatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(authStore.userName || 'User')}&background=22c55e&color=ffffff`
 })
 
-// Méthodes
 const toggleAvatarMenu = () => {
   avatarMenu.value = true
 }
