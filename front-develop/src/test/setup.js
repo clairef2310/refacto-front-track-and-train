@@ -152,3 +152,10 @@ window.visualViewport = {
   onresize: null,
   onscroll: null
 }
+
+window.ResizeObserver = class {
+  constructor() {}
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
