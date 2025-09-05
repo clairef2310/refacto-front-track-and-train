@@ -61,10 +61,6 @@ describe('Auth Store', () => {
     vi.resetAllMocks()
   })
 
-  describe('Getters', () => {
-    // Tests des getters...
-  })
-
   describe('Actions', () => {
     it('initialize fetches user when token exists', async () => {
       store.token = 'fake-token'

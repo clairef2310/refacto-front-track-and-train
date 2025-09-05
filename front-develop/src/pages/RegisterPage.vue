@@ -27,7 +27,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <PrimaryButton @click="handleLogin" :loading="authStore.loading">
+          <PrimaryButton @click="handleLogin" :loading="authStore.loading" data-test-id="primary-btn">
             Se créer un compte
           </PrimaryButton>
         </v-card-actions>
