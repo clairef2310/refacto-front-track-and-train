@@ -1,0 +1,118 @@
+import { vi } from 'vitest'
+import { config } from '@vue/test-utils'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+// Mock all CSS and style imports before creating Vuetify
+vi.mock('*.css', () => ({}))
+vi.mock('*.scss', () => ({}))
+vi.mock('*.sass', () => ({}))
+vi.mock('*.less', () => ({}))
+vi.mock('*.styl', () => ({}))
+vi.mock('*.stylus', () => ({}))
+
+// Mock specific Vuetify CSS files and styles
+vi.mock('vuetify/lib/components/VCode/VCode.css', () => ({}))
+vi.mock('vuetify/styles', () => ({}))
+vi.mock('vuetify/lib/**/*.css', () => ({}))
+vi.mock('vuetify/_styles.sass', () => ({}))
+
+// Mock image and other asset files
+vi.mock('*.png', () => 'test-file-stub')
+vi.mock('*.jpg', () => 'test-file-stub')
+vi.mock('*.jpeg', () => 'test-file-stub')
+vi.mock('*.gif', () => 'test-file-stub')
+vi.mock('*.svg', () => 'test-file-stub')
+vi.mock('*.webp', () => 'test-file-stub')
+
+const vuetify = createVuetify({
+  components,
+  directives,
+})
+
+config.global.plugins = [vuetify]
+
+vi.mock('@/plugins/axios', () => ({
+  default: {
+    get: vi.fn(() => Promise.resolve({ data: {} })),
+    post: vi.fn(() => Promise.resolve({ data: {} })),
+    put: vi.fn(() => Promise.resolve({ data: {} })),
+    delete: vi.fn(() => Promise.resolve({ data: {} })),
+    create: vi.fn(() => ({
+      get: vi.fn(() => Promise.resolve({ data: {} })),
+      post: vi.fn(() => Promise.resolve({ data: {} })),
+      put: vi.fn(() => Promise.resolve({ data: {} })),
+      delete: vi.fn(() => Promise.resolve({ data: {} }))
+    }))
+  }
+}))
+
+vi.mock('vue-router', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    back: vi.fn(),
+    replace: vi.fn(),
+    currentRoute: { value: { path: '/' } }
+  }),
+  RouterView: { template: '<div><slot /></div>' }
+}))
+
+Object.defineProperty(window, 'localStorage', {
+  value: {
+    getItem: vi.fn(() => null),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    clear: vi.fn()
+  },
+  writable: true
+})
+
+config.global.mocks = {
+  $route: {
+    params: {},
+    query: {}
+  },
+  $router: {
+    push: vi.fn(),
+    replace: vi.fn()
+  }
+}
+
+config.global.components = {
+  // Au lieu de mocker des composants séparés, nous moquons directement VBtn
+  VBtn: {
+    render() {
+      return null
+    },
+    props: {
+      color: String,
+      loading: Boolean,
+      disabled: Boolean,
+      size: String,
+      'prepend-icon': String
+    }
+  },
+  PrimaryButton: {
+    name: 'PrimaryButton',
+    props: ['loading', 'disabled'],
+    emits: ['click'],
+    template: `<button data-test="primary-btn" :disabled="disabled" @click="$emit('click')"><slot /></button>`
+  },
+  SecondaryButton: {
+    name: 'SecondaryButton',
+    props: ['loading', 'disabled'],
+    template: `<button data-test="secondary-btn" :disabled="disabled"><slot /></button>`
+  },
+  DeleteButton: {
+    name: 'DeleteButton',
+    props: ['loading', 'disabled'],
+    template: `<button data-test="delete-btn" :disabled="disabled"><slot /></button>`
+  },
+  TertiaryButton: {
+    name: 'TertiaryButton',
+    props: ['loading', 'disabled'],
+    template: `<button data-test="tertiary-btn" :disabled="disabled"><slot /></button>`
+  }
+}
+
