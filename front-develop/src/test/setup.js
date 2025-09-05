@@ -26,6 +26,12 @@ vi.mock('*.webp', () => 'test-file-stub')
 const vuetify = createVuetify({
   components,
   directives,
+  aliases: {
+    PrimaryButton: components.VBtn,
+    SecondaryButton: components.VBtn,
+    DeleteButton: components.VBtn,
+    TertiaryButton: components.VBtn,
+  },
 })
 
 config.global.plugins = [vuetify]
@@ -45,15 +51,19 @@ vi.mock('@/plugins/axios', () => ({
   }
 }))
 
-vi.mock('vue-router', () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-    back: vi.fn(),
-    replace: vi.fn(),
-    currentRoute: { value: { path: '/' } }
-  }),
-  RouterView: { template: '<div><slot /></div>' }
-}))
+vi.mock('vue-router', async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    useRouter: () => ({
+      push: vi.fn(),
+      back: vi.fn(),
+      replace: vi.fn(),
+      currentRoute: { value: { path: '/' } }
+    }),
+    RouterView: { template: '<div><slot /></div>' }
+  }
+})
 
 Object.defineProperty(window, 'localStorage', {
   value: {
@@ -93,22 +103,52 @@ config.global.components = {
     name: 'PrimaryButton',
     props: ['loading', 'disabled'],
     emits: ['click'],
-    template: `<button data-test="primary-btn" :disabled="disabled" @click="$emit('click')"><slot /></button>`
+    template: `<button data-test="primary-btn" data-test-id="primary-btn" :disabled="disabled" @click="$emit('click')"><slot /></button>`
   },
   SecondaryButton: {
     name: 'SecondaryButton',
     props: ['loading', 'disabled'],
-    template: `<button data-test="secondary-btn" :disabled="disabled"><slot /></button>`
+    template: `<button data-test="secondary-btn" data-test-id="secondary-btn" :disabled="disabled"><slot /></button>`
   },
   DeleteButton: {
     name: 'DeleteButton',
     props: ['loading', 'disabled'],
-    template: `<button data-test="delete-btn" :disabled="disabled"><slot /></button>`
+    template: `<button data-test="delete-btn" data-test-id="delete-btn" :disabled="disabled"><slot /></button>`
   },
   TertiaryButton: {
     name: 'TertiaryButton',
     props: ['loading', 'disabled'],
-    template: `<button data-test="tertiary-btn" :disabled="disabled"><slot /></button>`
+    template: `<button data-test="tertiary-btn" data-test-id="tertiary-btn" :disabled="disabled"><slot /></button>`
   }
 }
 
+Object.defineProperty(window, 'visualViewport', {
+  value: {
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    width: 1024,
+    height: 768,
+    offsetLeft: 0,
+    offsetTop: 0,
+    pageLeft: 0,
+    pageTop: 0,
+    scale: 1
+  },
+  writable: true,
+  configurable: true
+})
+
+window.visualViewport = {
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+  dispatchEvent: vi.fn(),
+  width: 1024,
+  height: 768,
+  offsetLeft: 0,
+  offsetTop: 0,
+  pageLeft: 0,
+  pageTop: 0,
+  scale: 1,
+  onresize: null,
+  onscroll: null
+}
