@@ -44,7 +44,6 @@ describe('DietList.vue', () => {
     expect(cards).toHaveLength(2)
     expect(cards[0].props('diet').name).toBe('Petit-déjeuner')
     expect(cards[1].props('diet').name).toBe('Déjeuner')
-
   })
 
   it('émet "dietClick" quand une DietCard est cliquée', async () => {

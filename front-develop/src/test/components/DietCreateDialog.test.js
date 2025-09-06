@@ -276,7 +276,7 @@ describe('DietCreateDialog.vue', () => {
 
     it('workflow d\'annulation', async () => {
       wrapper = createWrapper({ modelValue: true })
-      
+
       await wrapper.find('.v-text-field-stub').setValue('Test à annuler')
       await nextTick()
 
